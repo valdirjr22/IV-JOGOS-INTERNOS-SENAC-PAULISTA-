@@ -1178,6 +1178,10 @@
 
                 if (storedModalities) {
                     allModalities = JSON.parse(storedModalities);
+                    // Filtra modalidades indesejadas que podem ter sido salvas anteriormente
+                    allModalities = allModalities.filter(modality =>
+                        modality.name !== 'Jogo de Bola' && modality.name !== 'Corrida'
+                    );
                 } else {
                     allModalities = []; // Inicia vazio se não houver modalidades armazenadas
                 }
@@ -2187,67 +2191,69 @@
                     <button onclick="window.print()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Imprimir</button>
                     <button onclick="document.getElementById('printContainer').style.display='none'; document.body.classList.remove('printing-active');" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Fechar</button>
                 </div>
-                <h1 style="text-align: center; color: #1a202c; font-size: 2.5rem; margin-bottom: 20px;">Relatório de Jogos - SENAC PAULISTA</h1>
+                <h1 style="text-align: center; color: #1a202c; font-size: 2.5rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ccc;">Relatório de Jogos - SENAC PAULISTA</h1>
             `;
 
             // Adiciona o Placar Principal ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px;">Placar Geral de Turmas</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px; text-align: center;">Placar Geral de Turmas</h2>`;
             if (allTeams.length > 0) {
+                const numModalityColumns = allModalities.length;
                 reportContent += `
-                    <div style="display: grid; grid-template-columns: 1.5fr repeat(${allModalities.length}, 1fr) 1fr; gap: 8px; background-color: #2196F3; color: white; font-weight: 700; padding: 12px 8px; border-radius: 8px; margin-bottom: 12px;">
+                    <div style="display: grid; grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr; gap: 8px; background-color: #2196F3; color: white; font-weight: 700; padding: 12px 8px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #1976D2;">
                         <div style="text-align: center; color: #FF9800;">EQUIPES</div>
                         ${allModalities.map(modality => `<div style="text-align: center; color: #FF9800;">${modality.name}</div>`).join('')}
                         <div style="text-align: center; color: #FF9800;">TOTAL</div>
                     </div>
                 `;
-                allTeams.sort((a, b) => b.total - a.total).forEach(team => {
+                allTeams.sort((a, b) => b.total - a.total).forEach((team, index) => {
+                    const rowBgColor = index % 2 === 0 ? '#E3F2FD' : '#D1E6FA'; // Alternating row colors
                     reportContent += `
-                        <div style="display: grid; grid-template-columns: 1.5fr repeat(${allModalities.length}, 1fr) 1fr; gap: 8px; padding: 12px 0; align-items: center; text-align: center; background-color: #E3F2FD; border-radius: 8px; margin-bottom: 5px;">
+                        <div style="display: grid; grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr; gap: 8px; padding: 12px 0; align-items: center; text-align: center; background-color: ${rowBgColor}; border-radius: 8px; margin-bottom: 5px; border: 1px solid #ccc;">
                             <div style="padding: 8px; text-align: left; padding-left: 12px; font-weight: 700; color: #333333;">${team.name}</div>
-                            ${allModalities.map(modality => `<div style="padding: 8px; background-color: #E3F2FD; color: #333333;">${team.scores ? (team.scores[modality.id] || 0) : 0}</div>`).join('')}
+                            ${allModalities.map(modality => `<div style="padding: 8px; background-color: ${rowBgColor}; color: #333333;">${team.scores ? (team.scores[modality.id] || 0) : 0}</div>`).join('')}
                             <div style="padding: 8px; font-weight: 700; color: #333333; background-color: #FFECB3;">${team.total || 0}</div>
                         </div>
                     `;
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px;">Nenhuma turma cadastrada.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhuma turma cadastrada.</p>`;
             }
 
             // Adiciona Confrontos ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px;">Confrontos Ativos</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center;">Confrontos Ativos</h2>`;
             if (activeMatches.length > 0) {
                 activeMatches.forEach(match => {
                     const team1 = allTeams.find(t => t.id === match.team1Id);
                     const team2 = allTeams.find(t => t.id === match.team2Id);
-                    const modality = allModalities.find(m => m.id === match.modalityId); // Obtém o objeto da modalidade
+                    const modality = allModalities.find(m => m.id === match.modalityId);
 
                     if (team1 && team2 && modality) {
                         reportContent += `
-                            <div style="background-color: #D1E6FA; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;">
+                            <div style="background-color: #D1E6FA; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; border: 1px solid #90CAF9;">
                                 <div style="width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; color: #333; margin-bottom: 10px;">Modalidade: ${modality.name}</div>
                                 <div style="display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 100px;">
-                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333;">${team1.name}</span>
-                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800;">${match.score1}</span>
+                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center;">${team1.name}</span>
+                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800; background-color: #FFF3E0; padding: 5px 15px; border-radius: 8px; margin-top: 5px;">${match.score1}</span>
                                 </div>
                                 <span style="font-size: 1.8rem; font-weight: 700; color: #2196F3; margin: 0 15px;">vs.</span>
                                 <div style="display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 100px;">
-                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333;">${team2.name}</span>
-                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800;">${match.score2}</span>
+                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center;">${team2.name}</span>
+                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800; background-color: #FFF3E0; padding: 5px 15px; border-radius: 8px; margin-top: 5px;">${match.score2}</span>
                                 </div>
                             </div>
                         `;
                     }
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px;">Nenhum confronto ativo.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhum confronto ativo.</p>`;
             }
 
             // Adiciona Placares por Modalidade ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px;">Placares por Modalidade</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center;">Placares por Modalidade</h2>`;
             if (allModalities.length > 0) {
                 allModalities.forEach(modality => {
                     reportContent += `
-                        <h3 style="font-size: 1.5rem; font-weight: 600; color: #333; margin-top: 20px; margin-bottom: 10px; text-align: center;">Modalidade: ${modality.name}</h3>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; color: #333; margin-top: 20px; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 5px;">Modalidade: ${modality.name}</h3>
                     `;
                     const teamsWithModalityScores = allTeams
                         .filter(team => team.scores && team.scores.hasOwnProperty(modality.id))
@@ -2260,18 +2266,18 @@
                     if (teamsWithModalityScores.length > 0) {
                         teamsWithModalityScores.forEach(team => {
                             reportContent += `
-                                <div style="display: flex; justify-content: space-between; align-items: center; background-color: #E3F2FD; padding: 15px 25px; margin-bottom: 8px; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; background-color: #E3F2FD; padding: 15px 25px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #90CAF9;">
                                     <span style="font-size: 1.2rem; font-weight: 600; color: #333;">${team.name}</span>
                                     <span style="font-size: 1.8rem; font-weight: 800; color: #FF9800;">${team.score}</span>
                                 </div>
                             `;
                         });
                     } else {
-                        reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 10px;">Nenhum placar para esta modalidade.</p>`;
+                        reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 10px; font-style: italic;">Nenhum placar para esta modalidade.</p>`;
                     }
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px;">Nenhuma modalidade cadastrada.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhuma modalidade cadastrada.</p>`;
             }
 
             // Exibe o relatório no contêiner oculto e dispara a impressão
@@ -2286,7 +2292,7 @@
             setTimeout(() => {
                 printContainer.style.display = 'none';
                 document.body.classList.remove('printing-active');
-            }, 100); // Pequeno atraso para permitir que a caixa de diálogo de impressão seja aberta
+            }, 100);
         }
 
         // --- Carregamento Inicial da Aplicação ---
