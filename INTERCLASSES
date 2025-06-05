@@ -780,41 +780,199 @@
 
         /* Estilos específicos para impressão */
         @media print {
-            body > *:not(.print-container) {
-                display: none !important;
+            body {
+                background-color: white !important; /* Ensure body is white for print */
+                margin: 0;
+                padding: 0;
             }
-            .print-container {
+            /* Hide all direct children of body except print-container */
+            body > *:not(#printContainer) {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            /* Show the print container and its contents */
+            #printContainer {
                 display: block !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: white;
+                visibility: visible !important;
+                position: static !important; /* Remove absolute positioning during print */
+                width: 100% !important;
+                height: auto !important; /* Allow content to dictate height */
+                margin: 0;
                 padding: 20px;
                 box-sizing: border-box;
-                font-family: 'Inter', sans-serif;
-                color: black;
+                overflow: visible; /* Ensure content is not cut off */
+                color: black !important; /* Default text color black for print */
             }
-            .print-container h1, .print-container h2 {
+            /* Ensure all elements within print-container are visible */
+            #printContainer * {
+                visibility: visible !important;
+                display: block !important;
+                position: static !important;
+                width: auto !important;
+                height: auto !important;
+                max-width: 100% !important;
+                color: black !important; /* Ensure all text within is black */
+                background-color: transparent !important; /* Clear backgrounds by default */
+                box-shadow: none !important; /* Remove shadows */
+                border-radius: 0 !important; /* Remove border radius */
+                padding: 0 !important; /* Reset padding for controlled layout */
+                margin: 0 !important; /* Reset margin for controlled layout */
+            }
+
+            /* Specific style overrides for print */
+            #printContainer h1, #printContainer h2, #printContainer h3, #printContainer p, #printContainer span, #printContainer div {
+                color: black !important;
+                -webkit-print-color-adjust: exact; /* Force colors to be printed */
+            }
+
+            #printContainer h1 {
+                font-size: 2.5rem !important; /* Larger title */
+                margin-bottom: 20px !important;
+                padding-bottom: 10px !important;
+                border-bottom: 2px solid #ccc !important;
+                color: #1a202c !important; /* Dark text for main title */
+                text-align: center !important;
+            }
+            #printContainer h2 {
+                font-size: 1.8rem !important;
+                margin-top: 30px !important;
+                margin-bottom: 15px !important;
+                text-align: center !important;
+                padding-bottom: 5px !important;
+                border-bottom: 1px solid #ddd !important;
+                color: #2196F3 !important; /* Blue for section titles */
+            }
+            #printContainer h3 {
+                font-size: 1.5rem !important;
+                margin-top: 20px !important;
+                margin-bottom: 10px !important;
+                text-align: center !important;
+                border-bottom: 1px solid #eee !important;
+                padding-bottom: 5px !important;
+                page-break-before: auto; /* Avoid breaking page right before a sub-header */
+                color: #333 !important; /* Darker grey for sub-headers */
+            }
+            #printContainer .grid-header {
+                display: grid !important;
+                background-color: #2196F3 !important;
+                color: white !important;
+                font-weight: 700 !important;
+                padding: 12px 8px !important;
+                margin-bottom: 12px !important;
+                border: 1px solid #1976D2 !important;
+                -webkit-print-color-adjust: exact;
+            }
+            #printContainer .grid-header div {
+                color: #FF9800 !important; /* Orange text for header cells */
+                font-size: 1.1rem !important;
+                text-align: center !important;
+                background-color: transparent !important;
+            }
+            #printContainer .grid-row {
+                display: grid !important;
+                gap: 8px !important;
+                padding: 12px 0 !important;
+                align-items: center !important;
+                text-align: center !important;
+                border-radius: 8px !important;
+                margin-bottom: 5px !important;
+                border: 1px solid #ccc !important;
+                page-break-inside: avoid; /* Keep rows together */
+            }
+            #printContainer .grid-row:nth-child(even) {
+                background-color: #D1E6FA !important;
+                -webkit-print-color-adjust: exact;
+            }
+            #printContainer .grid-row:nth-child(odd) {
+                background-color: #E3F2FD !important;
+                -webkit-print-color-adjust: exact;
+            }
+            #printContainer .grid-cell {
+                padding: 8px !important;
+                text-align: center !important;
+                color: #333333 !important;
+                font-size: 1rem !important;
+                background-color: inherit !important; /* Inherit from row to show alternating colors */
+            }
+            #printContainer .grid-cell.total-score {
+                font-weight: 700 !important;
+                background-color: #FFECB3 !important;
+                -webkit-print-color-adjust: exact;
+                color: #333333 !important;
+                font-size: 1.1rem !important;
+            }
+
+            /* Match item specific styles for print */
+            #printContainer .match-item {
+                background-color: #D1E6FA !important;
+                padding: 20px !important;
+                border-radius: 12px !important;
+                margin-bottom: 15px !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: space-around !important;
+                align-items: center !important;
+                border: 1px solid #90CAF9 !important;
+                page-break-inside: avoid; /* Keep match items together */
+                -webkit-print-color-adjust: exact;
+            }
+            #printContainer .match-item div {
+                background-color: transparent !important; /* Clear background for internal divs */
+            }
+            #printContainer .match-item span {
+                color: black !important; /* Default to black for text in match items */
+            }
+            #printContainer .match-item .match-team-name {
+                font-size: 1.5rem !important;
+                font-weight: 700 !important;
+                color: #333 !important;
+            }
+            #printContainer .match-item .match-score-input {
+                font-size: 2.5rem !important;
+                font-weight: 800 !important;
+                color: #FF9800 !important;
+                background-color: #FFF3E0 !important;
+                padding: 5px 15px !important;
+                border-radius: 8px !important;
+                margin-top: 5px !important;
+                -webkit-print-color-adjust: exact;
+                border: none !important; /* Remove borders from inputs in print */
+            }
+            #printContainer .match-item .match-vs-text {
+                font-size: 1.8rem !important;
+                font-weight: 700 !important;
+                color: #2196F3 !important;
+                margin: 0 15px !important;
+            }
+
+            /* Score item specific styles for print */
+            #printContainer .score-item {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                background-color: #E3F2FD !important;
+                padding: 15px 25px !important;
+                margin-bottom: 8px !important;
+                border-radius: 8px !important;
+                border: 1px solid #90CAF9 !important;
+                page-break-inside: avoid; /* Keep score items together */
+                -webkit-print-color-adjust: exact;
+            }
+            #printContainer .score-item span {
                 color: black !important;
             }
-            .print-container .grid-header, .print-container .grid-row, .print-container .score-item, .print-container .match-item {
-                border: 1px solid #ccc;
-                margin-bottom: 5px;
-                padding: 10px;
-                break-inside: avoid; /* Evita quebrar esses elementos entre as páginas */
+            #printContainer .score-item .team-name {
+                font-size: 1.2rem !important;
+                font-weight: 600 !important;
+                color: #333 !important;
             }
-            .print-container .grid-cell, .print-container .match-team-block {
-                background-color: #f0f0f0 !important; /* Light grey for print cells */
-                color: black !important;
+            #printContainer .score-item .team-score {
+                font-size: 1.8rem !important;
+                font-weight: 800 !important;
+                color: #FF9800 !important;
             }
-            .print-container .total-score, .print-container .team-score, .print-container .match-score-input {
-                background-color: #fdd8b8 !important; /* Light orange for scores in print */
-                color: black !important;
-            }
-            /* Esconde botões/controles específicos de impressão */
-            .print-container .print-hide {
+
+            .print-hide {
                 display: none !important;
             }
         }
@@ -1891,7 +2049,7 @@
                     .filter(team => team.scores && team.scores.hasOwnProperty(modalityId))
                     .map(team => ({
                         name: team.name,
-                        score: parseInt(team.scores[modalityId]) || 0
+                        score: parseInt(team.scores[selectedModality.id]) || 0 
                     }))
                     .sort((a, b) => b.score - a.score); // Ordena pela pontuação em ordem decrescente
 
@@ -2186,41 +2344,51 @@
         printReportBtn.addEventListener('click', generatePrintReport);
 
         function generatePrintReport() {
+            // Guarda o ID da página ativa antes de iniciar a impressão
+            const previouslyActivePageId = currentActivePage;
+
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('pt-BR', {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
             let reportContent = `
                 <div class="print-hide" style="text-align: center; margin-bottom: 20px;">
                     <button onclick="window.print()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Imprimir</button>
-                    <button onclick="document.getElementById('printContainer').style.display='none'; document.body.classList.remove('printing-active');" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Fechar</button>
+                    <button onclick="restoreAppFromPrint()" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Fechar</button>
                 </div>
                 <h1 style="text-align: center; color: #1a202c; font-size: 2.5rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ccc;">Relatório de Jogos - SENAC PAULISTA</h1>
+                <p style="text-align: center; font-size: 0.9rem; color: #555; margin-bottom: 30px;">Gerado em: ${formattedDate}</p>
             `;
 
             // Adiciona o Placar Principal ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px; text-align: center;">Placar Geral de Turmas</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px; text-align: center; padding-bottom: 5px; border-bottom: 1px solid #ddd;">Placar Geral de Turmas</h2>`;
             if (allTeams.length > 0) {
                 const numModalityColumns = allModalities.length;
                 reportContent += `
-                    <div style="display: grid; grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr; gap: 8px; background-color: #2196F3; color: white; font-weight: 700; padding: 12px 8px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #1976D2;">
-                        <div style="text-align: center; color: #FF9800;">EQUIPES</div>
-                        ${allModalities.map(modality => `<div style="text-align: center; color: #FF9800;">${modality.name}</div>`).join('')}
-                        <div style="text-align: center; color: #FF9800;">TOTAL</div>
+                    <div class="grid-header" style="grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr;">
+                        <div>EQUIPES</div>
+                        ${allModalities.map(modality => `<div>${modality.name}</div>`).join('')}
+                        <div>TOTAL</div>
                     </div>
                 `;
                 allTeams.sort((a, b) => b.total - a.total).forEach((team, index) => {
                     const rowBgColor = index % 2 === 0 ? '#E3F2FD' : '#D1E6FA'; // Alternating row colors
                     reportContent += `
-                        <div style="display: grid; grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr; gap: 8px; padding: 12px 0; align-items: center; text-align: center; background-color: ${rowBgColor}; border-radius: 8px; margin-bottom: 5px; border: 1px solid #ccc;">
-                            <div style="padding: 8px; text-align: left; padding-left: 12px; font-weight: 700; color: #333333;">${team.name}</div>
-                            ${allModalities.map(modality => `<div style="padding: 8px; background-color: ${rowBgColor}; color: #333333;">${team.scores ? (team.scores[modality.id] || 0) : 0}</div>`).join('')}
-                            <div style="padding: 8px; font-weight: 700; color: #333333; background-color: #FFECB3;">${team.total || 0}</div>
+                        <div class="grid-row" style="grid-template-columns: 1.5fr repeat(${numModalityColumns}, 1fr) 1fr;">
+                            <div class="grid-cell" style="text-align: left; padding-left: 12px; font-weight: 700;">${team.name}</div>
+                            ${allModalities.map(modality => `<div class="grid-cell">${team.scores ? (team.scores[modality.id] || 0) : 0}</div>`).join('')}
+                            <div class="grid-cell total-score">${team.total || 0}</div>
                         </div>
                     `;
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhuma turma cadastrada.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic; font-size: 1rem;">Nenhuma turma cadastrada.</p>`;
             }
 
             // Adiciona Confrontos ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center;">Confrontos Ativos</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center; padding-bottom: 5px; border-bottom: 1px solid #ddd;">Confrontos Ativos</h2>`;
             if (activeMatches.length > 0) {
                 activeMatches.forEach(match => {
                     const team1 = allTeams.find(t => t.id === match.team1Id);
@@ -2229,31 +2397,33 @@
 
                     if (team1 && team2 && modality) {
                         reportContent += `
-                            <div style="background-color: #D1E6FA; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; border: 1px solid #90CAF9;">
-                                <div style="width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; color: #333; margin-bottom: 10px;">Modalidade: ${modality.name}</div>
-                                <div style="display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 100px;">
-                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center;">${team1.name}</span>
-                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800; background-color: #FFF3E0; padding: 5px 15px; border-radius: 8px; margin-top: 5px;">${match.score1}</span>
-                                </div>
-                                <span style="font-size: 1.8rem; font-weight: 700; color: #2196F3; margin: 0 15px;">vs.</span>
-                                <div style="display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 100px;">
-                                    <span style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center;">${team2.name}</span>
-                                    <span style="font-size: 2.5rem; font-weight: 800; color: #FF9800; background-color: #FFF3E0; padding: 5px 15px; border-radius: 8px; margin-top: 5px;">${match.score2}</span>
+                            <div class="match-item">
+                                <div style="width: 100%; text-align: center; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">Modalidade: ${modality.name}</div>
+                                <div class="match-teams-display" style="justify-content: center; gap: 20px;">
+                                    <div class="match-team-block">
+                                        <span class="match-team-name">${team1.name}</span>
+                                        <span class="match-score-input">${match.score1}</span>
+                                    </div>
+                                    <span class="match-vs-text">vs.</span>
+                                    <div class="match-team-block">
+                                        <span class="match-team-name">${team2.name}</span>
+                                        <span class="match-score-input">${match.score2}</span>
+                                    </div>
                                 </div>
                             </div>
                         `;
                     }
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhum confronto ativo.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic; font-size: 1rem;">Nenhum confronto ativo.</p>`;
             }
 
             // Adiciona Placares por Modalidade ao relatório
-            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center;">Placares por Modalidade</h2>`;
+            reportContent += `<h2 style="color: #2196F3; font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; text-align: center; padding-bottom: 5px; border-bottom: 1px solid #ddd;">Placares por Modalidade</h2>`;
             if (allModalities.length > 0) {
                 allModalities.forEach(modality => {
                     reportContent += `
-                        <h3 style="font-size: 1.5rem; font-weight: 600; color: #333; margin-top: 20px; margin-bottom: 10px; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 5px;">Modalidade: ${modality.name}</h3>
+                        <h3>Modalidade: ${modality.name}</h3>
                     `;
                     const teamsWithModalityScores = allTeams
                         .filter(team => team.scores && team.scores.hasOwnProperty(modality.id))
@@ -2266,34 +2436,51 @@
                     if (teamsWithModalityScores.length > 0) {
                         teamsWithModalityScores.forEach(team => {
                             reportContent += `
-                                <div style="display: flex; justify-content: space-between; align-items: center; background-color: #E3F2FD; padding: 15px 25px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #90CAF9;">
-                                    <span style="font-size: 1.2rem; font-weight: 600; color: #333;">${team.name}</span>
-                                    <span style="font-size: 1.8rem; font-weight: 800; color: #FF9800;">${team.score}</span>
+                                <div class="score-item">
+                                    <span class="team-name">${team.name}</span>
+                                    <span class="team-score">${team.score}</span>
                                 </div>
                             `;
                         });
                     } else {
-                        reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 10px; font-style: italic;">Nenhum placar para esta modalidade.</p>`;
+                        reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 10px; font-style: italic; font-size: 1rem;">Nenhum placar para esta modalidade.</p>`;
                     }
                 });
             } else {
-                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic;">Nenhuma modalidade cadastrada.</p>`;
+                reportContent += `<p style="text-align: center; color: #6b7280; margin-top: 20px; font-style: italic; font-size: 1rem;">Nenhuma modalidade cadastrada.</p>`;
             }
 
-            // Exibe o relatório no contêiner oculto e dispara a impressão
+            // Exibe o relatório no contêiner oculto
             printContainer.innerHTML = reportContent;
-            printContainer.style.display = 'block';
-            document.body.classList.add('printing-active'); // Adiciona classe ao corpo para ocultar outros elementos durante a impressão
 
-            window.print();
+            // Esconde todas as seções principais da aplicação
+            document.querySelectorAll('.app-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            printContainer.style.display = 'block'; // Torna o contêiner de impressão visível
 
-            // Oculta o contêiner de impressão após o fechamento da caixa de diálogo de impressão
-            // Usando um pequeno atraso, pois print() é bloqueante
+            // Pequeno atraso para garantir que o navegador renderize o conteúdo antes de imprimir
             setTimeout(() => {
+                window.print();
+                // Restaura o estado da aplicação após o diálogo de impressão ser fechado
                 printContainer.style.display = 'none';
-                document.body.classList.remove('printing-active');
-            }, 100);
+                document.querySelectorAll('.app-container').forEach(container => {
+                    container.style.display = 'block';
+                });
+                showPage(previouslyActivePageId); // Volta para a página que estava ativa antes da impressão
+            }, 50);
         }
+
+        // Função global para restaurar o estado da aplicação após a impressão
+        // É necessário que seja window.functionName para ser acessível pelo onclick do HTML gerado.
+        window.restoreAppFromPrint = function() {
+            printContainer.style.display = 'none';
+            document.querySelectorAll('.app-container').forEach(container => {
+                container.style.display = 'block';
+            });
+            showPage(currentActivePage);
+        };
+
 
         // --- Carregamento Inicial da Aplicação ---
         document.addEventListener('DOMContentLoaded', () => {
