@@ -663,7 +663,7 @@
         /* Aumentado o tamanho da fonte para os placares nos confrontos */
         #matchScoreboardPage .match-score-input,
         #detailedScoreboardPage .match-score-input { /* Apply to detailed page as well */
-            width: 100px; /* Adjusted width for larger font */
+            width: 150px; /* Increased width for larger font and numbers */
             padding: 10px;
             font-size: 5rem; /* Increased font size for score input */
             font-weight: 800;
@@ -1677,7 +1677,8 @@
                 input.addEventListener('input', () => {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
-                        updateTeamScore(team.id, row);
+                        // When only scores are updated, pass null for newTeamName
+                        updateTeamScore(team.id, row, null);
                     }, 500);
                 });
             });
@@ -1700,12 +1701,18 @@
 
             const saveTeamName = () => {
                 const newName = teamNameInput.value.trim();
-                if (newName && newName !== teamNameDisplay.textContent) {
-                    updateTeamScore(team.id, row);
+                const originalName = teamNameDisplay.textContent; // Get the name currently displayed
+
+                // Only attempt to update if the name has actually changed
+                if (newName && newName !== originalName) {
+                    // Pass the newName to updateTeamScore, which will handle validation and saving
+                    updateTeamScore(team.id, row, newName);
+                } else {
+                    // If name is empty or unchanged, just revert UI state
+                    teamNameInput.value = originalName; // Revert input field
+                    teamNameDisplay.classList.remove('hidden');
+                    teamNameInput.classList.add('hidden');
                 }
-                teamNameDisplay.textContent = teamNameInput.value;
-                teamNameDisplay.classList.remove('hidden');
-                teamNameInput.classList.add('hidden');
             };
 
             teamNameInput.addEventListener('blur', saveTeamName);
@@ -1720,15 +1727,42 @@
          * Atualiza a pontuação de uma equipe na matriz global e re-renderiza o placar.
          * @param {string} teamId - O ID da equipe a ser atualizada.
          * @param {HTMLElement} rowElement - O elemento da linha HTML da equipe.
+         * @param {string|null} newTeamName - O novo nome da equipe, se estiver sendo atualizado (opcional).
          */
-        function updateTeamScore(teamId, rowElement) {
+        function updateTeamScore(teamId, rowElement, newTeamName = null) {
             const teamIndex = allTeams.findIndex(t => t.id === teamId);
             if (teamIndex === -1) {
                 showStatusMessage("Erro: Turma não encontrada.", 'error');
                 return;
             }
 
-            const teamName = rowElement.querySelector('.team-name-input').value;
+            let nameToUse = allTeams[teamIndex].name; // Default to current name
+            if (newTeamName !== null) {
+                const trimmedName = newTeamName.trim();
+                if (!trimmedName) {
+                    showStatusMessage("O nome da turma não pode estar vazio.", 'error');
+                    // Revert input field value visually if it was changed
+                    const teamNameInput = rowElement.querySelector('.team-name-input');
+                    if (teamNameInput) {
+                        teamNameInput.value = allTeams[teamIndex].name;
+                        rowElement.querySelector('.team-name-display').textContent = allTeams[teamIndex].name;
+                    }
+                    return; // Prevent further execution for this invalid name
+                }
+                if (allTeams.some(t => t.id !== teamId && t.name.toLowerCase() === trimmedName.toLowerCase())) {
+                    showStatusMessage(`Uma turma com o nome "${trimmedName}" já existe. Por favor, escolha um nome diferente.`, 'error');
+                    // Revert input field value visually if it was changed
+                    const teamNameInput = rowElement.querySelector('.team-name-input');
+                    if (teamNameInput) {
+                        teamNameInput.value = allTeams[teamIndex].name;
+                        rowElement.querySelector('.team-name-display').textContent = allTeams[teamIndex].name;
+                    }
+                    return; // Prevent further execution for this duplicate name
+                }
+                nameToUse = trimmedName;
+            }
+
+
             const updatedScores = {};
             rowElement.querySelectorAll('.score-input').forEach(input => {
                 const modalityId = input.dataset.modalityId;
@@ -1737,7 +1771,7 @@
 
             const newTeamData = {
                 id: teamId,
-                name: teamName,
+                name: nameToUse,
                 scores: updatedScores,
             };
             newTeamData.total = calculateTotal(newTeamData);
@@ -1766,9 +1800,16 @@
                 initialScores[modality.id] = 0;
             });
 
+            const newTeamName = `Nova Equipe ${allTeams.length + 1}`; // Default name for new team
+            // Check for duplicate name before adding
+            if (allTeams.some(t => t.name.toLowerCase() === newTeamName.toLowerCase())) {
+                showStatusMessage(`Uma turma com o nome "${newTeamName}" já existe. Por favor, edite o nome após adicionar.`, 'error');
+                return;
+            }
+
             const newTeam = {
                 id: newTeamId,
-                name: `Nova Equipe ${allTeams.length + 1}`,
+                name: newTeamName,
                 scores: initialScores,
                 total: 0,
             };
@@ -2468,7 +2509,7 @@
                     container.style.display = 'block';
                 });
                 showPage(previouslyActivePageId); // Volta para a página que estava ativa antes da impressão
-            }, 50);
+            }, 500);
         }
 
         // Função global para restaurar o estado da aplicação após a impressão
