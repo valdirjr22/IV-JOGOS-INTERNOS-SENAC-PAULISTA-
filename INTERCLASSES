@@ -118,7 +118,7 @@
             box-shadow: inset 0 0 5px rgba(0,0,0,0.05); /* Subtle inner shadow */
         }
 
-        #mainScoreboardPage .add-team-btn, #mainScoreboardPage .reset-btn, #mainScoreboardPage .edit-team-btn, #mainScoreboardPage .remove-team-btn, #mainScoreboardPage .modality-btn, #mainScoreboardPage .view-modality-scores-btn, #mainScoreboardPage .view-matches-btn, #mainScoreboardPage .print-report-btn {
+        #mainScoreboardPage .add-team-btn, #mainScoreboardPage .reset-btn, #mainScoreboardPage .edit-team-btn, #mainScoreboardPage .remove-team-btn, #mainScoreboardPage .modality-btn, #mainScoreboardPage .view-detailed-modality-scores-btn, #mainScoreboardPage .view-matches-btn, #mainScoreboardPage .view-overall-scores-btn, #mainScoreboardPage .print-report-btn {
             padding: 10px 16px;
             border-radius: 8px;
             font-weight: 600;
@@ -364,12 +364,12 @@
             font-weight: 600;
         }
 
-        #mainScoreboardPage .view-modality-scores-btn, #mainScoreboardPage .view-matches-btn {
+        #mainScoreboardPage .view-detailed-modality-scores-btn, #mainScoreboardPage .view-matches-btn, #mainScoreboardPage .view-overall-scores-btn {
             background-color: #007bff; /* Blue */
             color: white;
         }
 
-        #mainScoreboardPage .view-modality-scores-btn:hover, #mainScoreboardPage .view-matches-btn:hover {
+        #mainScoreboardPage .view-detailed-modality-scores-btn:hover, #mainScoreboardPage .view-matches-btn:hover, #mainScoreboardPage .view-overall-scores-btn:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
@@ -454,7 +454,7 @@
         }
 
         /* --- Estilos da Página de Placar Detalhado --- */
-        #detailedScoreboardPage .scoreboard-detail-container {
+        #detailedScoreboardPage .scoreboard-detail-container, #overallScoreboardPage .scoreboard-detail-container {
             background-color: #ffffff;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -464,7 +464,7 @@
             text-align: center;
         }
 
-        #detailedScoreboardPage .header-section {
+        #detailedScoreboardPage .header-section, #overallScoreboardPage .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -473,7 +473,7 @@
             gap: 10px;
         }
 
-        #detailedScoreboardPage .header-section h1 {
+        #detailedScoreboardPage .header-section h1, #overallScoreboardPage .header-section h1 {
             font-size: 2.5rem; /* Larger font for modality name */
             font-weight: 700;
             color: #1976D2; /* Dark Blue */
@@ -481,7 +481,7 @@
             text-align: center;
         }
 
-        #detailedScoreboardPage .score-item {
+        #detailedScoreboardPage .score-item, #overallScoreboardPage .score-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -492,11 +492,11 @@
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
         }
 
-        #detailedScoreboardPage .score-item:nth-child(even) {
+        #detailedScoreboardPage .score-item:nth-child(even), #overallScoreboardPage .score-item:nth-child(even) {
             background-color: #D1E6FA; /* Slightly darker light blue for even rows */
         }
 
-        #detailedScoreboardPage .team-name {
+        #detailedScoreboardPage .team-name, #overallScoreboardPage .team-name {
             font-size: 2rem; /* Larger font for team name */
             font-weight: 600;
             color: #333333;
@@ -504,7 +504,7 @@
             text-align: left;
         }
 
-        #detailedScoreboardPage .team-score {
+        #detailedScoreboardPage .team-score, #overallScoreboardPage .team-score {
             font-size: 3rem; /* Very large font for score */
             font-weight: 800;
             color: #FF9800; /* Orange */
@@ -512,7 +512,7 @@
             text-align: right;
         }
 
-        #detailedScoreboardPage .no-data-message {
+        #detailedScoreboardPage .no-data-message, #overallScoreboardPage .no-data-message {
             text-align: center;
             padding: 40px;
             color: #6b7280;
@@ -523,7 +523,7 @@
             border: 1px dashed #d1d5db;
         }
 
-        #detailedScoreboardPage .button-group {
+        #detailedScoreboardPage .button-group, #overallScoreboardPage .button-group {
             display: flex;
             justify-content: center;
             margin-top: 30px;
@@ -531,7 +531,7 @@
             flex-wrap: wrap;
         }
 
-        #detailedScoreboardPage .back-button, #detailedScoreboardPage .home-button {
+        #detailedScoreboardPage .back-button, #detailedScoreboardPage .home-button, #overallScoreboardPage .back-button, #overallScoreboardPage .home-button {
             padding: 12px 24px;
             border-radius: 10px;
             font-weight: 700;
@@ -541,22 +541,22 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #detailedScoreboardPage .back-button {
+        #detailedScoreboardPage .back-button, #overallScoreboardPage .back-button {
             background-color: #6c757d; /* Grey */
             color: white;
         }
 
-        #detailedScoreboardPage .back-button:hover {
+        #detailedScoreboardPage .back-button:hover, #overallScoreboardPage .back-button:hover {
             background-color: #5a6268;
             transform: translateY(-2px);
         }
 
-        #detailedScoreboardPage .home-button {
+        #detailedScoreboardPage .home-button, #overallScoreboardPage .home-button {
             background-color: #007bff; /* Blue */
             color: white;
         }
 
-        #detailedScoreboardPage .home-button:hover {
+        #detailedScoreboardPage .home-button:hover, #overallScoreboardPage .home-button:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
         }
@@ -1022,8 +1022,9 @@
             <div class="button-group">
                 <button id="addTeamBtn" class="add-team-btn">Adicionar Turma</button>
                 <button id="resetScoresBtn" class="reset-btn">Reiniciar Placar</button>
-                <button id="viewModalityScoresBtn" class="view-modality-scores-btn">Placar por Modalidade</button>
+                <button id="viewDetailedModalityScoresBtn" class="view-detailed-modality-scores-btn">Placar por Modalidade</button>
                 <button id="viewMatchesBtn" class="view-matches-btn">Gerenciar Confrontos</button>
+                <button id="viewOverallScoresBtn" class="view-overall-scores-btn">Ver Placar Geral</button>
                 <button id="printReportBtn" class="print-report-btn">Imprimir Relatório</button>
             </div>
         </div>
@@ -1069,6 +1070,23 @@
                 <div class="button-group">
                     <button id="detailedPageBackButton" class="back-button">Voltar</button>
                     <button id="detailedPageHomeButton" class="home-button">Voltar ao Início</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nova Seção: Página do Placar Geral -->
+        <div id="overallScoreboardPage" class="page-section">
+            <div class="scoreboard-detail-container">
+                <div class="header-section">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Placar Geral</h1>
+                </div>
+                <div id="overallScores" class="score-list">
+                    <div id="noOverallScoresMessage" class="no-data-message hidden">
+                        Nenhum placar geral disponível.
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button id="overallPageBackButton" class="back-button">Voltar</button>
                 </div>
             </div>
         </div>
@@ -1166,8 +1184,9 @@
         const currentModalitiesContainer = document.getElementById('currentModalities');
         const addTeamBtn = document.getElementById('addTeamBtn');
         const resetScoresBtn = document.getElementById('resetScoresBtn');
-        const viewModalityScoresBtn = document.getElementById('viewModalityScoresBtn');
+        const viewDetailedModalityScoresBtn = document.getElementById('viewDetailedModalityScoresBtn'); // Renamed
         const viewMatchesBtn = document.getElementById('viewMatchesBtn'); // Botão para confrontos
+        const viewOverallScoresBtn = document.getElementById('viewOverallScoresBtn'); // New button for overall scores
         const printReportBtn = document.getElementById('printReportBtn'); // Botão para relatório de impressão
 
         // Elementos da Página de Seleção de Modalidades
@@ -1185,6 +1204,12 @@
         const detailedPageHomeButton = document.getElementById('detailedPageHomeButton');
         const modalitySpecificMatchesContainer = document.getElementById('modalitySpecificMatchesContainer');
         const noModalityMatchesMessage = document.getElementById('noModalityMatchesMessage');
+
+        // Elementos da Nova Página de Placar Geral
+        const overallScoreboardPage = document.getElementById('overallScoreboardPage');
+        const overallScoresContainer = document.getElementById('overallScores');
+        const noOverallScoresMessage = document.getElementById('noOverallScoresMessage');
+        const overallPageBackButton = document.getElementById('overallPageBackButton');
 
         // Elementos da Página de Confrontos de Equipes
         const matchScoreboardPage = document.getElementById('matchScoreboardPage');
@@ -1229,6 +1254,8 @@
                 populateMatchModalitySelector(); // Popula o seletor de modalidade para confrontos
                 renderMatchScoreboardPage(); // Renderiza os confrontos ativos
                 updateCountdownDisplay(); // Atualiza o display do cronômetro regressivo imediatamente
+            } else if (pageId === 'overallScoreboardPage') {
+                renderOverallScoreboardPage();
             }
         }
 
@@ -2051,7 +2078,7 @@
         }
 
         // Event listener para o botão "Placar por Modalidade" (Página Principal -> Página de Modalidades)
-        viewModalityScoresBtn.addEventListener('click', () => {
+        viewDetailedModalityScoresBtn.addEventListener('click', () => {
             renderModalitiesPage(); // Renderiza os botões de modalidade
             showPage('modalitiesPage'); // Mostra a página de seleção de modalidades
         });
@@ -2172,6 +2199,37 @@
             showPage('mainScoreboardPage'); // Volta para o placar principal
         });
 
+        // --- Funções da Nova Página de Placar Geral ---
+        function renderOverallScoreboardPage() {
+            overallScoresContainer.innerHTML = ''; // Limpa pontuações anteriores
+            noOverallScoresMessage.classList.add('hidden');
+
+            const teamsSortedByTotal = [...allTeams].sort((a, b) => b.total - a.total);
+
+            if (teamsSortedByTotal.length === 0) {
+                noOverallScoresMessage.classList.remove('hidden');
+            } else {
+                teamsSortedByTotal.forEach(team => {
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item'; // Reutiliza o estilo de item de pontuação
+                    scoreItem.innerHTML = `
+                        <span class="team-name">${team.name}</span>
+                        <span class="team-score">${team.total}</span>
+                    `;
+                    overallScoresContainer.appendChild(scoreItem);
+                });
+            }
+        }
+
+        // Event listener para o botão "Ver Placar Geral"
+        viewOverallScoresBtn.addEventListener('click', () => {
+            showPage('overallScoreboardPage');
+        });
+
+        // Event listener para o botão "Voltar" na Página de Placar Geral
+        overallPageBackButton.addEventListener('click', () => {
+            showPage('mainScoreboardPage'); // Volta para o placar principal
+        });
 
         // --- Funções da Nova Página de Confrontos de Equipes ---
 
